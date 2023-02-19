@@ -55,7 +55,6 @@ class BrowserWindow(QMainWindow):
 
     def navigate_to_url(self):
         url = QUrl(self.url_bar.text())
-        self.update_url()
         self.browser.setUrl(url)
 
     def navigate_to_favorite(self, index):
