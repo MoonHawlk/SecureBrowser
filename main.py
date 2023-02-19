@@ -17,6 +17,7 @@ class BrowserWindow(QMainWindow):
         self.url_bar.returnPressed.connect(self.navigate_to_url)
         self.toolbar = QToolBar("Navigation")
         self.url_bar.setPlaceholderText(f"Put the full link here:")
+        
         self.addToolBar(self.toolbar)
 
         back_button = QAction(QIcon("assets/back.png"), "Back", self)
@@ -44,6 +45,7 @@ class BrowserWindow(QMainWindow):
         self.url_copy_bar.setFixedWidth(250)
         self.url_copy_bar.setPlaceholderText(f"To Copy URL press enter here!")
         self.url_copy_bar.returnPressed.connect(self.copy_current_url)
+        
         self.toolbar.addWidget(self.url_copy_bar)
 
     def navigate_to_url(self):
