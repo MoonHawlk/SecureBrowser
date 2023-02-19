@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QUrl
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QToolBar, QLineEdit, QComboBox, QSizePolicy
+from PyQt5.QtGui import QIcon, QClipboard
+from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QToolBar, QLineEdit, QComboBox, QSizePolicy, QMessageBox
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 import sys
 
@@ -16,6 +16,7 @@ class BrowserWindow(QMainWindow):
         self.url_bar = QLineEdit()
         self.url_bar.returnPressed.connect(self.navigate_to_url)
         self.toolbar = QToolBar("Navigation")
+        self.url_bar.setPlaceholderText(f"Put the full link here:")
         self.addToolBar(self.toolbar)
 
         back_button = QAction(QIcon("assets/back.png"), "Back", self)
@@ -33,14 +34,21 @@ class BrowserWindow(QMainWindow):
         self.favorite_bar = QComboBox()
         self.favorite_bar.setFixedWidth(150)
         self.favorite_bar.setMinimumContentsLength(20)
-        self.favorite_bar.addItems(["Google", "DuckGo", "Brave", "GitHub"])
+        self.favorite_bar.addItems(["Google", "DuckGo", "Brave", "Youtube", "GitHub"])
         self.favorite_bar.currentIndexChanged.connect(self.navigate_to_favorite)
         self.toolbar.addWidget(self.favorite_bar)
 
         self.toolbar.addWidget(self.url_bar)
 
+        self.url_copy_bar = QLineEdit()
+        self.url_copy_bar.setFixedWidth(250)
+        self.url_copy_bar.setPlaceholderText(f"To Copy URL press enter here!")
+        self.url_copy_bar.returnPressed.connect(self.copy_current_url)
+        self.toolbar.addWidget(self.url_copy_bar)
+
     def navigate_to_url(self):
         url = QUrl(self.url_bar.text())
+        self.update_url()
         self.browser.setUrl(url)
 
     def navigate_to_favorite(self, index):
@@ -51,11 +59,19 @@ class BrowserWindow(QMainWindow):
             self.browser.setUrl(QUrl("https://brave.com/pt-br/"))
         elif favorite == "DuckGo":
             self.browser.setUrl(QUrl("https://duckduckgo.com/"))
+        elif favorite == "Youtube":
+            self.browser.setUrl(QUrl("https://www.youtube.com/"))
         elif favorite == "GitHub":
             self.browser.setUrl(QUrl("https://github.com/MoonHawlk"))
         else:
             pass
 
+    def copy_current_url(self):
+        clipboard = QApplication.clipboard()
+        url = self.browser.url().toString()
+        clipboard.setText(url)
+        QMessageBox.information(self, "URL Copied!", f"Copied URL is: {url}")
+   
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     browser_window = BrowserWindow()
