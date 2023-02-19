@@ -7,7 +7,8 @@ import sys
 class BrowserWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Secure Browser")
+        
+        self.setWindowTitle("0x7Br Secure Browser")
         self.setWindowIcon(QIcon("assets/icon.png"))
         self.browser = QWebEngineView()
         self.browser.setUrl(QUrl("http://google.com"))
@@ -20,6 +21,10 @@ class BrowserWindow(QMainWindow):
         
         self.addToolBar(self.toolbar)
 
+        browser_info_button = QAction(QIcon("assets/browserinfo.png"), "Browser Info", self)
+        browser_info_button.triggered.connect(self.browser_info)
+        self.toolbar.addAction(browser_info_button)
+        
         back_button = QAction(QIcon("assets/back.png"), "Back", self)
         back_button.triggered.connect(self.browser.back)
         self.toolbar.addAction(back_button)
@@ -74,6 +79,12 @@ class BrowserWindow(QMainWindow):
         clipboard.setText(url)
         QMessageBox.information(self, "URL Copied!", f"Copied URL is: {url}")
    
+    def browser_info(self):
+        browser_name = "0x7Br Secure Browser"
+        version = "1.5"
+        staff = "Filipe Moreno ( MoonHawlk )"
+        QMessageBox.information(self, "Browser info", f"Browser name is: {browser_name}\nBrowser version is: {version}\nStaff members are: {staff}")
+        
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     browser_window = BrowserWindow()
