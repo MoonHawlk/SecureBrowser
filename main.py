@@ -1,41 +1,32 @@
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtWebEngineWidgets import *
+from PyQt5.QtCore import QUrl
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QToolBar, QLineEdit
+from PyQt5.QtWebEngineWidgets import QWebEngineView
+import sys
 
-class Browser(QWidget):
+class BrowserWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('Secure Browser')
-        self.create_layout()
-        
-    def create_layout(self):
-        self.web_view = QWebEngineView()
+        self.setWindowTitle("Simple Browser")
+        self.setWindowIcon(QIcon("icon.png"))
+        self.browser = QWebEngineView()
+        self.browser.setUrl(QUrl("http://google.com"))
+        self.setCentralWidget(self.browser)
+
         self.url_bar = QLineEdit()
-        self.url_bar.returnPressed.connect(self.load_url)
-        self.back_button = QPushButton('<')
-        self.back_button.clicked.connect(self.web_view.back)
-        self.forward_button = QPushButton('>')
-        self.forward_button.clicked.connect(self.web_view.forward)
-        self.refresh_button = QPushButton('Refresh')
-        self.refresh_button.clicked.connect(self.web_view.reload)
-        
-        button_layout = QHBoxLayout()
-        button_layout.addWidget(self.back_button)
-        button_layout.addWidget(self.forward_button)
-        button_layout.addWidget(self.refresh_button)
-        
-        main_layout = QVBoxLayout()
-        main_layout.addWidget(self.url_bar)
-        main_layout.addLayout(button_layout)
-        main_layout.addWidget(self.web_view)
-        self.setLayout(main_layout)
-        
-    def load_url(self):
-        url = self.url_bar.text()
-        self.web_view.load(QUrl(url))
-    
-if __name__ == '__main__':
-    app = QApplication([])
-    browser = Browser()
-    browser.show()
-    app.exec_()
+        self.url_bar.returnPressed.connect(self.navigate_to_url)
+        self.toolbar = QToolBar("Navigation")
+        self.addToolBar(self.toolbar)
+        #self.toolbar.addAction(self.browser.pageAction(QtWebEnginePage.Back))
+        #self.toolbar.addAction(self.browser.pageAction(QtWebEnginePage.Forward))
+        self.toolbar.addWidget(self.url_bar)
+
+    def navigate_to_url(self):
+        url = QUrl(self.url_bar.text())
+        self.browser.setUrl(url)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    browser_window = BrowserWindow()
+    browser_window.show()
+    sys.exit(app.exec_())
