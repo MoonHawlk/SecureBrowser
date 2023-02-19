@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QUrl
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QToolBar, QLineEdit
-from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 import sys
 
 class BrowserWindow(QMainWindow):
@@ -17,8 +17,19 @@ class BrowserWindow(QMainWindow):
         self.url_bar.returnPressed.connect(self.navigate_to_url)
         self.toolbar = QToolBar("Navigation")
         self.addToolBar(self.toolbar)
-        #self.toolbar.addAction(self.browser.pageAction(QtWebEnginePage.Back))
-        #self.toolbar.addAction(self.browser.pageAction(QtWebEnginePage.Forward))
+
+        back_button = QAction(QIcon("back.png"), "Back", self)
+        back_button.triggered.connect(self.browser.back)
+        self.toolbar.addAction(back_button)
+
+        forward_button = QAction(QIcon("forward.png"), "Forward", self)
+        forward_button.triggered.connect(self.browser.forward)
+        self.toolbar.addAction(forward_button)
+
+        refresh_button = QAction(QIcon("refresh.png"), "Refresh", self)
+        refresh_button.triggered.connect(self.browser.reload)
+        self.toolbar.addAction(refresh_button)
+
         self.toolbar.addWidget(self.url_bar)
 
     def navigate_to_url(self):
