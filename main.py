@@ -8,7 +8,7 @@ class BrowserWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Secure Browser")
-        self.setWindowIcon(QIcon("icon.png"))
+        self.setWindowIcon(QIcon("assets/icon.png"))
         self.browser = QWebEngineView()
         self.browser.setUrl(QUrl("http://google.com"))
         self.setCentralWidget(self.browser)
@@ -18,15 +18,15 @@ class BrowserWindow(QMainWindow):
         self.toolbar = QToolBar("Navigation")
         self.addToolBar(self.toolbar)
 
-        back_button = QAction(QIcon("back.png"), "Back", self)
+        back_button = QAction(QIcon("assets/back.png"), "Back", self)
         back_button.triggered.connect(self.browser.back)
         self.toolbar.addAction(back_button)
 
-        forward_button = QAction(QIcon("forward.png"), "Forward", self)
+        forward_button = QAction(QIcon("assets/forward.png"), "Forward", self)
         forward_button.triggered.connect(self.browser.forward)
         self.toolbar.addAction(forward_button)
 
-        refresh_button = QAction(QIcon("refresh.png"), "Refresh", self)
+        refresh_button = QAction(QIcon("assets/refresh.png"), "Refresh", self)
         refresh_button.triggered.connect(self.browser.reload)
         self.toolbar.addAction(refresh_button)
 
