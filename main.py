@@ -81,7 +81,7 @@ class BrowserWindow(QMainWindow):
    
     def browser_info(self):
         browser_name = "0x7Br Secure Browser"
-        version = "1.5"
+        version = "3.0.0"
         staff = "Filipe Moreno ( MoonHawlk )"
         QMessageBox.information(self, "Browser info", f"Browser name is: {browser_name}\nBrowser version is: {version}\nStaff members are: {staff}")
         
