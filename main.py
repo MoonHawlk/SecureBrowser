@@ -2,6 +2,8 @@ from PyQt5.QtCore import QUrl
 from PyQt5.QtGui import QIcon, QClipboard
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QToolBar, QLineEdit, QComboBox, QSizePolicy, QMessageBox
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
+from pytube import YouTube
+from pytube.cli import on_progress
 import sys
 
 class BrowserWindow(QMainWindow):
@@ -53,6 +55,10 @@ class BrowserWindow(QMainWindow):
         
         self.toolbar.addWidget(self.url_copy_bar)
 
+        download_video_button = QAction(QIcon("assets/downloadvideo.png"), "Downlaod Video", self)
+        download_video_button.triggered.connect(self.download_by_url)
+        self.toolbar.addAction(download_video_button)
+        
     def navigate_to_url(self):
         url = QUrl(self.url_bar.text())
         self.browser.setUrl(url)
@@ -80,9 +86,15 @@ class BrowserWindow(QMainWindow):
    
     def browser_info(self):
         browser_name = "0x7Br Secure Browser"
-        version = "3.0.0"
+        version = "3.1.0"
         staff = "Filipe Moreno ( MoonHawlk )"
         QMessageBox.information(self, "Browser info", f"Browser name is: {browser_name}\nBrowser version is: {version}\nStaff members are: {staff}")
+    
+    def download_by_url(self):
+        url = self.browser.url().toString()
+        youtubeLink = YouTube(url, on_progress_callback= on_progress)
+        locationYoutubeVideo = youtubeLink.streams.get_highest_resolution()
+        locationYoutubeVideo.download(".\Videos") 
         
 if __name__ == "__main__":
     app = QApplication(sys.argv)
